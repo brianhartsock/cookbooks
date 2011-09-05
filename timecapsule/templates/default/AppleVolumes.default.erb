@@ -174,7 +174,8 @@
 :DEFAULT: options:upriv,usedots
 
 # By default all users have access to their home directories.
-#~/			"Home Directory"
-/home/brianhartsock/TimeMachine TimeMachine allow:brianhartsock cnidscheme:dbd options:tm
+<% @shares.each do |share| %>
+<%= share %>
+<% end %>
 
 # End of File

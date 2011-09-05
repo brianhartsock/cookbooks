@@ -22,11 +22,12 @@ cookbook_file '/etc/netatalk/afpd.conf' do
 	notifies :restart, 'service[netatalk]'
 end
 
-cookbook_file '/etc/netatalk/AppleVolumes.default' do
-	source 'AppleVolumes.default'
+template '/etc/netatalk/AppleVolumes.default' do
+	source 'AppleVolumes.default.erb'
 	mode 0644
 	owner 'root'
 	group 'root'
+	variables :shares => node[:netatalk][:shares]
 
 	notifies :restart, 'service[netatalk]'
 end
@@ -49,4 +50,9 @@ cookbook_file '/etc/avahi/services/afpd.service' do
 	group 'root'
 
 	notifies :restart, 'service[avahi-daemon]'
+end
+
+directory '/home/timecapsule' do
+	owner 'brianhartsock'
+	group 'brianhartsock'
 end

@@ -1,0 +1,1 @@
+default[:shairport][:name] = "Shairport"
