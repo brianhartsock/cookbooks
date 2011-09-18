@@ -8,15 +8,5 @@
 #
 
 ['libid3tag0', 'mt-daapd'].each do |pkg|
-	package pkg do
-		action :install
-	end
-end
-
-directory '/home/media/music' do
-	owner 'brianhartsock'
-	group 'brianhartsock'
-	recursive true
-
-	notifies :restart, "service[netatalk]"
+  package pkg
 end

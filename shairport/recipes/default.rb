@@ -8,37 +8,36 @@
 #
 
 %w{libssl-dev libcrypt-openssl-rsa-perl libao-dev libio-socket-inet6-perl libwww-perl avahi-utils pkg-config}.each do |pkg|
-	package pkg do
-		action :install
-	end
+  package pkg
 end
 
-git '/usr/local/shairport' do
-	repository 'https://github.com/albertz/shairport.git'
-	action 'sync'
+git node['shairport']['directory'] do
+  repository 'https://github.com/albertz/shairport.git'
+  action 'sync'
 end
 
 execute 'make' do
-	command 'make'
-	cwd '/usr/local/shairport'
+  command 'make'
+  cwd node['shairport']['directory']
 end
 
 template '/etc/init/shairport.conf' do
-	source 'shairport.conf.erb'
-	mode 0644
-	owner 'root'
-	group 'root'
+  source 'shairport.conf.erb'
+  mode 0644
+  owner 'root'
+  group 'root'
 
-	variables :name => node[:shairport][:name]
+  variables :name => node['shairport']['name'], :directory => node['shairport']['directory']
 
-	notifies :restart, 'service[shairport]'
+  notifies :restart, 'service[shairport]'
 end
 
 link '/etc/init.d/shairport' do
-	to '/lib/init/upstart-job'
+  to '/lib/init/upstart-job'
 end
 
 service 'shairport' do
-	action :start
+  provider Chef::Provider::Service::Upstart
+  action [:enable, :start]
 end
 

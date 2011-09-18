@@ -175,7 +175,7 @@
 
 # By default all users have access to their home directories.
 <% @shares.each do |share| %>
-<%= share %>
+<%= share['directory'] %> <%= share['name'] %> <%= share['options'] %>
 <% end %>
 
 # End of File

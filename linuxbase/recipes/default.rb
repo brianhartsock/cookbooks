@@ -7,8 +7,22 @@
 # All rights reserved - Do Not Redistribute
 #
 
-['git', 'vim', 'subversion'].each do |pkg|
-	package pkg do
-	    action :install
-	end
+node['packages'].each do |pkg|
+  package pkg
+end
+
+mdadm "/dev/md0" do
+  devices [ "/dev/sdb", "/dev/sdc" ]
+  action [:create, :assemble]
+#store the mdadm config
+end
+
+#turn on xattr
+
+directory "/data"
+
+mount "/data" do
+  device "/dev/md0"
+  fstype "ext4"
+  action [:mount, :enable]
 end
